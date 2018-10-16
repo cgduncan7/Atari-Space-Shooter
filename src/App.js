@@ -145,8 +145,8 @@ const AtariSpaceShooter = (p5) => {
             if (!Config.PAUSE) {
                 Player.ship.position.x = p5.mouseX;
                 Player.ship.position.y = p5.mouseY
+                Player.ship.scale = 0.3;
             }
-            Player.ship.scale = 0.3;
 
             /**
              * Constrain player to the configured scene size
@@ -168,7 +168,6 @@ const AtariSpaceShooter = (p5) => {
              * Constrain all sprites to the available canvas area & generate new enemies
              */
             if (!Config.PAUSE) {
-                console.log(enemyTimer, Config.ENEMY_COUNTDOWN);
                 if (enemyTimer >= Config.ENEMY_COUNTDOWN && Config.MAX_ENEMY <= Config.LEVELS) {
                     enemyTimer = 0;
                     Config.CURRENT_LEVEL += 1;
@@ -183,6 +182,7 @@ const AtariSpaceShooter = (p5) => {
                     if (sprite.position.x <= 0 || sprite.position.x >= p5.width) sprite.velocity.x *= -1;
                     if (sprite.position.y <= 0 || sprite.position.y >= p5.height) sprite.velocity.y *= -1;
                 });
+                enemyTimer++;
             } else {
                 Enemy.ships.forEach(sprite => {
                     if (sprite.getSpeed() !== 0) {
@@ -206,9 +206,9 @@ const AtariSpaceShooter = (p5) => {
              */
             Player.bullets.forEach((bullet) => {
                 if (Config.PAUSE) {
-                    bullet.setSpeed(0, 270);
+                    if (bullet.getSpeed() !== 0) bullet.setSpeed(0, 270);
                 } else {
-                    bullet.setSpeed(10, 270);
+                    if (bullet.getSpeed() === 0) bullet.setSpeed(10, 270);
                 }
 
                 if (bullet.position.y < 1) {
@@ -241,7 +241,13 @@ const AtariSpaceShooter = (p5) => {
             // draw all sprites on the screen
             
             p5.drawSprites();
-            enemyTimer++;
+
+            if (Config.PAUSE) {
+                p5.textAlign(p5.CENTER);
+                p5.fill(255).textSize(33);
+                p5.textFont(FX.font);
+                p5.text('P To unpause', p5.width / 2, p5.height / 2);
+            }
         }
         else {
             p5.textAlign(p5.CENTER);
@@ -257,10 +263,10 @@ const AtariSpaceShooter = (p5) => {
      * Processing `keyPressed()` function
      */
     p5.keyPressed = () => {
-        if (p5.keyCode == 80 && Config.PAUSE == false) {
+        if (p5.keyCode == 80 && Config.GAME_INIT && Config.PAUSE == false) {
             Config.PAUSE = true;
         }
-        else if (p5.keyCode == 80 && Config.PAUSE == true) {
+        else if (p5.keyCode == 80 && Config.GAME_INIT && Config.PAUSE == true) {
             Config.PAUSE = false;
         }
     }
