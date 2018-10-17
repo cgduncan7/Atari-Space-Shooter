@@ -77,7 +77,7 @@ const AtariSpaceShooter = (p5) => {
         let canvas = p5.createCanvas(windowWidth / 2, windowHeight);
         canvas.parent('gameCanvas');
 
-        p5.setFrameRate(60);
+        p5.setFrameRate(30);
 
         // Create groups to hold various elements
         Player.bullets = new p5.Group();
@@ -246,7 +246,7 @@ const AtariSpaceShooter = (p5) => {
                 p5.textAlign(p5.CENTER);
                 p5.fill(255).textSize(33);
                 p5.textFont(FX.font);
-                p5.text('P To unpause', p5.width / 2, p5.height / 2);
+                p5.text('Press P to Play', p5.width / 2, p5.height / 2);
             }
         }
         else {
